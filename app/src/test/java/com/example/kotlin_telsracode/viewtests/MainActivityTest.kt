@@ -5,25 +5,16 @@ package com.example.kotlin_telsracode.viewtests
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
-import com.example.kotlin_telsracode.ApiCall.ApiClass
 import com.example.kotlin_telsracode.R
-import com.example.kotlin_telsracode.model.ExploreVisitModelClass
 import com.example.kotlin_telsracode.model.Row
 import com.example.kotlin_telsracode.views.MainActivity
-import junit.framework.TestCase
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnit
 
 
@@ -37,17 +28,18 @@ class MainActivityTest {
 
 
     @Test
-    public fun testMainActivityIsOnline() {
+    fun testMainActivityIsOnline() {
         val isOnline = mainActivity.isOnline(context = mainActivity)
         assertEquals(false ,isOnline)
     }
 
     @Test
-    public fun testOnItemClick() {
+    fun testOnItemClick() {
         val row = Row()
         row.title = "title"
         row.description = "description"
         row.imageHref = "image"
         mainActivity.onItemClick(row, 1)
     }
+
 }

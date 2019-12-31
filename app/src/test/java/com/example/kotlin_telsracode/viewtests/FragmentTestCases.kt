@@ -18,7 +18,7 @@ class FragmentTestCases {
     var mockitoRule = MockitoJUnit.rule()
 
     @Test
-    public fun testselectItemFragment() {
+    fun testselectItemFragment() {
         Assert.assertEquals(false, selectItemFragment.arguments != null)
     }
 }

@@ -1,7 +1,5 @@
 package com.example.kotlin_telsracode.views
 
-import android.inputmethodservice.Keyboard
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,10 +12,6 @@ import com.example.kotlin_telsracode.R
 import com.example.kotlin_telsracode.model.Row
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_listdetails.*
-import kotlinx.android.synthetic.main.fragment_select_item.*
-
-
 
 //For testcase refer FragmentTestCases
 
@@ -35,12 +29,12 @@ class SelectItemFragment : Fragment() {
         Log.d("Bindu", "SELECTEDITEM ROW "+row.title)
         Log.d("Bindu", "SELECTEDITEM ROW "+row.imageHref)
 
-        var imageView = view.findViewById(R.id.image_update) as ImageView
-        var subTitles: TextView = view.findViewById(R.id.sub_title) as TextView
-        var descriptions: TextView = view.findViewById(R.id.description_title) as TextView
+        val imageView = view.findViewById(R.id.image_update) as ImageView
+        val subTitles: TextView = view.findViewById(R.id.sub_title) as TextView
+        val descriptions: TextView = view.findViewById(R.id.description_title) as TextView
 
-        subTitles.setText(row.title.toString())
-        descriptions.setText(row.description)
+        subTitles.text = row.title.toString()
+        descriptions.text = row.description
 
         Picasso.get().load(row.imageHref).placeholder(R.mipmap.ic_launcher)
             .into(imageView, object : Callback {
@@ -55,4 +49,5 @@ class SelectItemFragment : Fragment() {
 
         return view
     }
+
 }

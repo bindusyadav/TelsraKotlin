@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlin_telsracode.R
@@ -44,10 +43,21 @@ class ExploreVisitAdapter(val context: Context, val mExploreVisitViewModelArrayl
         var mSubtitle_textView = itemView.subTitle
         var mDescription_textView = itemView.description
 
-      fun initialize(mExploreVisitViewModelArraylist:Row , action:OnVisitListItemListener){
+      fun initialize(mExploreVisitViewModelArraylist:Row, action:OnVisitListItemListener){
 
-          mSubtitle_textView.text = mExploreVisitViewModelArraylist.title
-          mDescription_textView.text = mExploreVisitViewModelArraylist.description
+         if( !mExploreVisitViewModelArraylist.title.equals(null)) {
+             mSubtitle_textView.text = mExploreVisitViewModelArraylist.title
+         }else{
+             mSubtitle_textView.setText("No Json response found")
+         }
+
+
+          if( !mExploreVisitViewModelArraylist.description.equals(null)) {
+              mDescription_textView.text = mExploreVisitViewModelArraylist.description
+          }else{
+              mDescription_textView.setText("No Json response found")
+          }
+
 
           Picasso.get().load(mExploreVisitViewModelArraylist.imageHref).into(mImageView)
 

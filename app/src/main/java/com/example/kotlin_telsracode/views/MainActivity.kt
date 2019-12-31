@@ -1,25 +1,28 @@
 package com.example.kotlin_telsracode.views
 
-import android.app.Fragment
 import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.kotlin_telsracode.ApiCall.ApiClass
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.kotlin_telsracode.R
+import com.example.kotlin_telsracode.apiCall.ApiClass
+import com.example.kotlin_telsracode.database.DataBaseHandler
 import com.example.kotlin_telsracode.model.ExploreVisitModelClass
 import com.example.kotlin_telsracode.model.Row
 import com.example.kotlin_telsracode.viewmodels.ExploreVisitViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import org.w3c.dom.Text
+import java.util.*
+import javax.sql.RowSet
+
 
 //First Screen of the app starts here
 //For Test cases refer MainActivityTest
@@ -28,33 +31,70 @@ class  MainActivity : AppCompatActivity(),ExploreVisitAdapter.OnVisitListItemLis
 
     private var mExploreVisitAdapter: ExploreVisitAdapter? = null
     private var mApiClass: ApiClass? = null
-    var mTitle: String? = null
+    private var mDataBaseHandler: DataBaseHandler? = null
+    private var mExploreVisitModelClass: ExploreVisitModelClass? = null
+    lateinit var mRandom:Random
+    lateinit var mHandler: Handler
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(com.example.kotlin_telsracode.R.layout.activity_main)
+        setContentView(R.layout.activity_main)
 
-        //to save the data
-        var sharedPreference: SharedPreferenceVisit = SharedPreferenceVisit(this)
+        val mNo_Internet :TextView = findViewById(R.id.no_internet)
+        val mSwipeRefreshLayout : SwipeRefreshLayout = findViewById(R.id.Swipe_refresh)
+        mDataBaseHandler = DataBaseHandler(this)
+        // open to read and write
+        mDataBaseHandler!!.getWritableDatabase();
 
-        //network checkcondidtion for Offline and Online.
 
+
+        //network checkcondition for Offline and Online.
         if (isOnline(context = this)) {
             recyler_view.visibility = View.VISIBLE
             no_internet.visibility = View.GONE
             mApiClass = ApiClass(baseContext, this)
             mApiClass!!.parseJson()
-        } else if (sharedPreference != null) {
+            Log.d("INTERNET", " ONLINE ")
+        } else if (mDataBaseHandler!= null) {
             recyler_view.visibility = View.VISIBLE
             no_internet.visibility = View.GONE
             mApiClass = ApiClass(baseContext, this)
             mApiClass!!.parseJson()
-            sharedPreference.getValueString("EXPLORELIST")
-        } else {
+            Log.d("mDataBaseHandler", " OFFLINE ")
+            mDataBaseHandler!!.getAll()
+        } else  {
+            Log.d("OFFLINE", " NO DATA ")
             recyler_view.visibility = View.GONE
-            no_internet.visibility = View.VISIBLE
+            mNo_Internet.visibility = View.VISIBLE
         }
+
+
+
+//        swipe-to-refresh the contents on recyclerview
+        mSwipeRefreshLayout.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
+            Log.d("REFRESH....starts", " REFRESHING.........")
+            if (isOnline(context = this)) {
+                recyler_view.visibility = View.VISIBLE
+                no_internet.visibility = View.GONE
+                mApiClass = ApiClass(baseContext, this)
+                mApiClass!!.parseJson()
+                Log.d("INTERNET2", " ONLINE ")
+            } else if (mDataBaseHandler != null) {
+                recyler_view.visibility = View.VISIBLE
+                no_internet.visibility = View.GONE
+                mApiClass = ApiClass(baseContext, this)
+                mApiClass!!.parseJson()
+                Log.d("Fetch_DATA_DB", " OFFLINE ")
+                mDataBaseHandler!!.getAll()
+            }
+            mSwipeRefreshLayout.isRefreshing = false
+            Log.d("REFRESH...end", " REFRESHED")
+
+        })
+
     }
+
 
     //method called for network check
     fun isOnline(context: Context): Boolean {
@@ -64,17 +104,19 @@ class  MainActivity : AppCompatActivity(),ExploreVisitAdapter.OnVisitListItemLis
         return networkInfo != null && networkInfo.isConnected
     }
 
+
     //this is a interface called to bind the data to recyclerview
     override fun dataBinding(exploreVisitModelClass: ExploreVisitModelClass) {
-        Log.d("BINDU", "exploreVisitModelClass " + exploreVisitModelClass.title)
-        setTitle(exploreVisitModelClass.title.toString())
+        val mRow:Row = Row()
+        title = exploreVisitModelClass.title.toString()
         mExploreVisitAdapter = ExploreVisitAdapter(this, exploreVisitModelClass.rows!!, this)
 
-
         recyler_view!!.setHasFixedSize(true)
-        recyler_view!!.setLayoutManager(LinearLayoutManager(this@MainActivity))
+        recyler_view!!.layoutManager = LinearLayoutManager(this@MainActivity)
         recyler_view!!.adapter = mExploreVisitAdapter
     }
+
+
 
     // interface onItemclik called here to send the values form Activity to fragment
     override fun onItemClick(mExploreVisitViewModelArraylist: Row, position: Int){
@@ -88,21 +130,8 @@ class  MainActivity : AppCompatActivity(),ExploreVisitAdapter.OnVisitListItemLis
         val fragmentManager = this.supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.add(R.id.fragment_frame, selectItemFragment)
-        //fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
 
-
-
     }
 
-    // i used refresh botton to refresh, in document mention refresh button or refreshing using swip
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        menu!!.findItem(R.id.refresh_btn).isVisible = true
-        menu.findItem(R.id.refresh_btn).setOnMenuItemClickListener {
-         isOnline(this)
-            return@setOnMenuItemClickListener true
-        }
-        return super.onCreateOptionsMenu(menu)
-    }
 }
