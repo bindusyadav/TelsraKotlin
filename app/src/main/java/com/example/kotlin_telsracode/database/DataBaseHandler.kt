@@ -2,14 +2,10 @@ package com.example.kotlin_telsracode.database
 
 import android.content.ContentValues
 import android.content.Context
-import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import android.view.View
-import com.example.kotlin_telsracode.model.ExploreVisitModelClass
 import com.example.kotlin_telsracode.model.Row
 
 class DataBaseHandler (context: Context) : SQLiteOpenHelper(context ,
@@ -27,16 +23,15 @@ class DataBaseHandler (context: Context) : SQLiteOpenHelper(context ,
         private val KEY_EXPLORE_VISIT_VIEW_MODEL = "title"
 
         //Row table
-        private val ROW_TABLE = "rows"
-        private  val KEY_ROW_ID = "rowId"
-        private  val KEY_ROW_TITLE ="title"
-        private  val KEY_ROW_DESCRIPTION ="description"
-        private  val KEY_ROW_IMAGE = "imageHref"
+         val ROW_TABLE = "rows"
+         val KEY_ROW_ID = "rowId"
+         val KEY_ROW_TITLE ="title"
+         val KEY_ROW_DESCRIPTION ="description"
+         val KEY_ROW_IMAGE = "imageHref"
 
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        //db!!.execSQL(CREATE_VISIT)
         val CREATE_ROW = (" CREATE TABLE " + ROW_TABLE + "(" + KEY_ROW_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "  + KEY_ROW_DESCRIPTION + " TEXT, " + KEY_ROW_TITLE + " TEXT, "+  KEY_ROW_IMAGE + " TEXT " + ")")
         db!!.execSQL(CREATE_ROW)
         Log.d("DATABASE", "CREATED")
@@ -54,11 +49,13 @@ class DataBaseHandler (context: Context) : SQLiteOpenHelper(context ,
         // Gets the data repository in write mode
         val db = writableDatabase
         val contentValues = ContentValues()
-        //contentValues.put(KEY_ROW_ID, count)
+//        contentValues.put(KEY_ROW_ID, count)
         contentValues.put(KEY_ROW_TITLE, row.title)
         contentValues.put(KEY_ROW_DESCRIPTION, row.description)
         contentValues.put(KEY_ROW_IMAGE,row.imageHref)
         db.insert(ROW_TABLE, null, contentValues)
+
+        db.close()
 
         return true
     }
@@ -114,4 +111,49 @@ class DataBaseHandler (context: Context) : SQLiteOpenHelper(context ,
         return cursor
     }
 
+
+    fun viewData(): Cursor? {
+        val rowList = ArrayList<Row>()
+        var subtitle: String
+        var description: String
+        var imgeHref: String
+        val db = this.readableDatabase
+        val cursor : Cursor = db.rawQuery("SELECT * FROM $ROW_TABLE ", null)
+        Log.d("DATABASE", "DATABASE moveToFirst "+cursor.moveToFirst())
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()){
+                if ( !cursor.isNull( cursor.getColumnIndex(KEY_ROW_TITLE) ) )
+                {
+                    subtitle = cursor.getString(cursor.getColumnIndex(KEY_ROW_TITLE))
+                }
+                else
+                {
+                    subtitle = ""
+                }
+
+                if ( !cursor.isNull( cursor.getColumnIndex(KEY_ROW_DESCRIPTION) ) )
+                {
+                    description = cursor.getString(cursor.getColumnIndex(KEY_ROW_DESCRIPTION))
+                }
+                else
+                {
+                    description = ""
+                }
+
+                if ( !cursor.isNull( cursor.getColumnIndex(KEY_ROW_IMAGE) ) )
+                {
+                    imgeHref = cursor.getString(cursor.getColumnIndex(KEY_ROW_IMAGE))
+                }
+                else
+                {
+                    imgeHref = ""
+                }
+
+                rowList.add(Row( subtitle, description ,imgeHref))
+                Log.d("BINDU", "DATABASE View Data "+subtitle + description + imgeHref)
+                cursor.moveToNext()
+            }
+        }
+        return cursor
+    }
 }

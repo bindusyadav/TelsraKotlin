@@ -1,11 +1,11 @@
 package com.example.kotlin_telsracode.views
 
 import android.content.Context
+import android.database.Cursor
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.Menu
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -19,9 +19,6 @@ import com.example.kotlin_telsracode.model.ExploreVisitModelClass
 import com.example.kotlin_telsracode.model.Row
 import com.example.kotlin_telsracode.viewmodels.ExploreVisitViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import org.w3c.dom.Text
-import java.util.*
-import javax.sql.RowSet
 
 
 //First Screen of the app starts here
@@ -32,69 +29,61 @@ class  MainActivity : AppCompatActivity(),ExploreVisitAdapter.OnVisitListItemLis
     private var mExploreVisitAdapter: ExploreVisitAdapter? = null
     private var mApiClass: ApiClass? = null
     private var mDataBaseHandler: DataBaseHandler? = null
-    private var mExploreVisitModelClass: ExploreVisitModelClass? = null
-    lateinit var mRandom:Random
-    lateinit var mHandler: Handler
-
+    var mCursor:Cursor?=null
+    var mHandler : Handler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val mNo_Internet :TextView = findViewById(R.id.no_internet)
+        val mNo_Internet  = findViewById(R.id.no_internet) as TextView
         val mSwipeRefreshLayout : SwipeRefreshLayout = findViewById(R.id.Swipe_refresh)
         mDataBaseHandler = DataBaseHandler(this)
         // open to read and write
         mDataBaseHandler!!.getWritableDatabase();
+        mHandler = Handler()
+        mCursor = mDataBaseHandler!!.viewData()
 
 
 
-        //network checkcondition for Offline and Online.
+        //network condition check for Offline and Online data.
+        networkCondition()
+
+
+//        swipe-to-refresh the contents on recyclerview
+        mSwipeRefreshLayout.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
+            Log.d("REFRESH....starts", " REFRESHING.........")
+            networkCondition()
+            mSwipeRefreshLayout.isRefreshing = false
+            Log.d("REFRESH...end", " REFRESHED")
+        })
+
+    }
+
+
+    private fun networkCondition() {
         if (isOnline(context = this)) {
             recyler_view.visibility = View.VISIBLE
             no_internet.visibility = View.GONE
             mApiClass = ApiClass(baseContext, this)
             mApiClass!!.parseJson()
             Log.d("INTERNET", " ONLINE ")
-        } else if (mDataBaseHandler!= null) {
-            recyler_view.visibility = View.VISIBLE
-            no_internet.visibility = View.GONE
-            mApiClass = ApiClass(baseContext, this)
-            mApiClass!!.parseJson()
-            Log.d("mDataBaseHandler", " OFFLINE ")
-            mDataBaseHandler!!.getAll()
-        } else  {
-            Log.d("OFFLINE", " NO DATA ")
-            recyler_view.visibility = View.GONE
-            mNo_Internet.visibility = View.VISIBLE
-        }
-
-
-
-//        swipe-to-refresh the contents on recyclerview
-        mSwipeRefreshLayout.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
-            Log.d("REFRESH....starts", " REFRESHING.........")
-            if (isOnline(context = this)) {
+        } else{
+            if (mCursor!!.getCount() != 0) {
                 recyler_view.visibility = View.VISIBLE
                 no_internet.visibility = View.GONE
                 mApiClass = ApiClass(baseContext, this)
                 mApiClass!!.parseJson()
-                Log.d("INTERNET2", " ONLINE ")
-            } else if (mDataBaseHandler != null) {
-                recyler_view.visibility = View.VISIBLE
-                no_internet.visibility = View.GONE
-                mApiClass = ApiClass(baseContext, this)
-                mApiClass!!.parseJson()
-                Log.d("Fetch_DATA_DB", " OFFLINE ")
+                Log.d("INTERNET", " OFFLINE ")
                 mDataBaseHandler!!.getAll()
+            } else  {
+                recyler_view.visibility = View.GONE
+                no_internet!!.visibility = View.VISIBLE
+                Log.d("OFFLINE", " NO DATA ")
             }
-            mSwipeRefreshLayout.isRefreshing = false
-            Log.d("REFRESH...end", " REFRESHED")
 
-        })
-
+        }
     }
-
 
     //method called for network check
     fun isOnline(context: Context): Boolean {
@@ -107,7 +96,6 @@ class  MainActivity : AppCompatActivity(),ExploreVisitAdapter.OnVisitListItemLis
 
     //this is a interface called to bind the data to recyclerview
     override fun dataBinding(exploreVisitModelClass: ExploreVisitModelClass) {
-        val mRow:Row = Row()
         title = exploreVisitModelClass.title.toString()
         mExploreVisitAdapter = ExploreVisitAdapter(this, exploreVisitModelClass.rows!!, this)
 
@@ -115,7 +103,6 @@ class  MainActivity : AppCompatActivity(),ExploreVisitAdapter.OnVisitListItemLis
         recyler_view!!.layoutManager = LinearLayoutManager(this@MainActivity)
         recyler_view!!.adapter = mExploreVisitAdapter
     }
-
 
 
     // interface onItemclik called here to send the values form Activity to fragment

@@ -17,6 +17,7 @@
         android:layout_gravity="center"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:padding="3dp"
         android:layout_margin="10dp"
         android:text="@string/subTitle" />
 
@@ -33,6 +34,7 @@
         android:id="@+id/image_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:src="@mipmap/ic_launcher"
         android:layout_margin="10dp"/>
 

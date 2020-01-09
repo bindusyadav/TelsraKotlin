@@ -1,10 +1,8 @@
 package com.example.kotlin_telsracode.model
 
-import androidx.annotation.IntegerRes
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
-import java.sql.RowId
 
 //Json structure followed, its a model class
 class Row : Serializable{
@@ -31,13 +29,6 @@ class Row : Serializable{
     constructor(){
 
     }
-
-    /*constructor(description:String ,title:String ,imageHref:String ,rowId: Int){
-        this.rowId = rowId
-        this.title = title
-        this.description = description
-        this.imageHref = imageHref
-    }*/
 
     constructor(description:String ,title:String ,imageHref:String){
 //        this.rowId = rowId

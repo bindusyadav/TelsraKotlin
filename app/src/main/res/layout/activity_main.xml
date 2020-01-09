@@ -29,8 +29,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/no_internet"
             android:text="@string/no_internet"
+            android:padding="10dp"
+            android:visibility="visible"
+            android:textSize="25sp"
+            android:layout_margin="80dp"
+            android:layout_gravity="center_horizontal"
             android:textStyle="bold"
-            android:visibility="visible"/>
+            android:gravity="center" />
     </LinearLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

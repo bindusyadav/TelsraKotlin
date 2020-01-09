@@ -46,8 +46,9 @@
                     android:id="@+id/image_view"
                     android:layout_width="80dp"
                     android:layout_height="50dp"
-                    android:background="#a6a6a6"
                     android:src="@mipmap/ic_launcher"
+                    android:scaleType="fitXY"
+                    android:adjustViewBounds="true"
                     android:layout_toStartOf="@+id/forward_button"/>
 
                 <ImageView
