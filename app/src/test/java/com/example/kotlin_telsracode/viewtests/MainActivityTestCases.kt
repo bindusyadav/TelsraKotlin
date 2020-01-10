@@ -5,12 +5,8 @@ package com.example.kotlin_telsracode.viewtests
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-import android.view.View
-import com.example.kotlin_telsracode.R
 import com.example.kotlin_telsracode.model.Row
 import com.example.kotlin_telsracode.views.MainActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test

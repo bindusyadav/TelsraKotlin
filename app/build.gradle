@@ -4,18 +4,16 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
-apply plugin: 'kotlin-kapt'
-
-
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.exampandroidExtensionsle.kotlin_telsracode"
+        applicationId "com.example.kotlin_telsracode"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true'
     }
     buildTypes {
         release {
@@ -30,62 +28,39 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.0.2'
+    implementation 'androidx.core:core-ktx:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
-    implementation 'com.google.android.gms:play-services-plus:16.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test:rules:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.1'
-    implementation 'android.arch.lifecycle:extensions:1.1.0'
-    implementation 'com.android.support:cardview-v7:28+'
-    implementation 'com.android.support:recyclerview-v7:28+'
-    implementation 'com.android.volley:volley:1.1.1'
-    implementation 'com.squareup.picasso:picasso:2.71828'
-    testImplementation 'org.mockito:mockito-core:1.10.19'
-    testImplementation 'org.mockito:mockito-inline:2.13.0'
-    implementation 'com.google.code.gson:gson:2.8.2'
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
-    androidTestImplementation 'com.android.support:support-annotations:24.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
 
 
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation('com.android.support.test.espresso:espresso-contrib:2.0') {
         exclude group: 'com.android.support', module: 'appcompat'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude module: 'recyclerview-v7'
     }
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    testImplementation 'androidx.test.ext:junit:1.1.0'
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
 
-//    // for intent mocking
-
-//
-//    // for network testing to track idle state
-//    androidTestImplementation 'com.android.support.test.espresso.idling:idling-concurrent:3.0.1'
-//    androidTestImplementation 'com.android.support.test.espresso:espresso-idling-resource:3.0.1'
-//
-//
-//    // AndroidJUnitRunner and JUnit Rules
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test:rules:1.0.1'
-
-
-    // Set this dependency to build and run Espresso tests
-    androidTestImplementation ('com.android.support.test.espresso:espresso-core:2.2.2'){
-        exclude module: 'support-annotations'
-    }
-
-
-//
-//    // Optional -- UI testing with UI Automator
-//        androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
-//         testImplementation 'org.robolectric:robolectric:4.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
+    implementation 'com.google.android.gms:play-services-plus:17.0.0'
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    implementation 'com.android.support:cardview-v7:28+'
+    implementation 'com.android.support:recyclerview-v7:28+'
+    implementation 'com.android.volley:volley:1.1.1'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    testImplementation 'org.mockito:mockito-core:2.13.0'
+    testImplementation 'org.mockito:mockito-inline:2.13.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
 
 }

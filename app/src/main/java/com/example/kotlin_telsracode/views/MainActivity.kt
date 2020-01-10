@@ -36,11 +36,11 @@ class  MainActivity : AppCompatActivity(),ExploreVisitAdapter.OnVisitListItemLis
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val mNo_Internet  = findViewById(R.id.no_internet) as TextView
+        val mNo_Internet  = findViewById<TextView>(R.id.no_internet)
         val mSwipeRefreshLayout : SwipeRefreshLayout = findViewById(R.id.Swipe_refresh)
         mDataBaseHandler = DataBaseHandler(this)
         // open to read and write
-        mDataBaseHandler!!.getWritableDatabase();
+        mDataBaseHandler!!.writableDatabase
         mHandler = Handler()
         mCursor = mDataBaseHandler!!.viewData()
 
@@ -69,7 +69,7 @@ class  MainActivity : AppCompatActivity(),ExploreVisitAdapter.OnVisitListItemLis
             mApiClass!!.parseJson()
             Log.d("INTERNET", " ONLINE ")
         } else{
-            if (mCursor!!.getCount() != 0) {
+            if (mCursor!!.count != 0) {
                 recyler_view.visibility = View.VISIBLE
                 no_internet.visibility = View.GONE
                 mApiClass = ApiClass(baseContext, this)
