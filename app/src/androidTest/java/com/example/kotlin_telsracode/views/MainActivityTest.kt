@@ -1,8 +1,5 @@
 package com.example.kotlin_telsracode.views
 
-import android.content.Context
-import android.net.ConnectivityManager
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
