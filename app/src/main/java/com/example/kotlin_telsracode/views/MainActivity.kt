@@ -26,17 +26,20 @@ import kotlinx.android.synthetic.main.activity_main.*
 class  MainActivity : AppCompatActivity(),ExploreVisitAdapter.OnVisitListItemListener,
     ExploreVisitViewModel {
 
+
     private var mExploreVisitAdapter: ExploreVisitAdapter? = null
     private var mApiClass: ApiClass? = null
     private var mDataBaseHandler: DataBaseHandler? = null
     var mCursor:Cursor?=null
     var mHandler : Handler? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val mNo_Internet  = findViewById<TextView>(R.id.no_internet)
+
+
         val mSwipeRefreshLayout : SwipeRefreshLayout = findViewById(R.id.Swipe_refresh)
         mDataBaseHandler = DataBaseHandler(this)
         // open to read and write
@@ -50,7 +53,7 @@ class  MainActivity : AppCompatActivity(),ExploreVisitAdapter.OnVisitListItemLis
         networkCondition()
 
 
-//        swipe-to-refresh the contents on recyclerview
+        // swipe-to-refresh the contents on recyclerview
         mSwipeRefreshLayout.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
             Log.d("REFRESH....starts", " REFRESHING.........")
             networkCondition()
@@ -61,7 +64,7 @@ class  MainActivity : AppCompatActivity(),ExploreVisitAdapter.OnVisitListItemLis
     }
 
 
-    private fun networkCondition() {
+      fun networkCondition() {
         if (isOnline(context = this)) {
             recyler_view.visibility = View.VISIBLE
             no_internet.visibility = View.GONE
@@ -84,6 +87,7 @@ class  MainActivity : AppCompatActivity(),ExploreVisitAdapter.OnVisitListItemLis
 
         }
     }
+
 
     //method called for network check
     fun isOnline(context: Context): Boolean {

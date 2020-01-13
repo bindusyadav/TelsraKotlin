@@ -15,6 +15,8 @@ import org.mockito.junit.MockitoJUnit
 
 
 class MainActivityTestCases {
+
+
     @Mock
     var mainActivity: MainActivity = MainActivity()
 

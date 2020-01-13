@@ -26,9 +26,7 @@ class Row : Serializable{
     var imageHref: String? = null
 
 
-    constructor(){
-
-    }
+    constructor(){}
 
     constructor(description:String ,title:String ,imageHref:String){
 //        this.rowId = rowId

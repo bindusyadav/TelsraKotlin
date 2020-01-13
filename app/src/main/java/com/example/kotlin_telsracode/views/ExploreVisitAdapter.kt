@@ -17,9 +17,6 @@ import kotlinx.android.synthetic.main.activity_listdetails.view.*
 class ExploreVisitAdapter(val context: Context, val mExploreVisitViewModelArraylists: List<Row>,var clickListener:OnVisitListItemListener) :
     RecyclerView.Adapter<ExploreVisitAdapter.CardViewHolder>() {
 
-    private val fragmentManager: FragmentManager? = null
-    val selectItemFragment: SelectItemFragment = SelectItemFragment()
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
         val view = LayoutInflater.from(parent.context)

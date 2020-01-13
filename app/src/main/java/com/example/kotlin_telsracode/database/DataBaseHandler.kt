@@ -17,10 +17,6 @@ class DataBaseHandler (context: Context) : SQLiteOpenHelper(context ,
         val DATABASE_VERSION = 4
         val DATABASE_NAME = "ExploreVisitDatabase.db"
 
-        //exploreVisitModleClass table
-        private val EXPLOREDATA_TABLE = "ExploreVisitModelClass"
-        private val ID = "id"
-        private val KEY_EXPLORE_VISIT_VIEW_MODEL = "title"
 
         //Row table
          val ROW_TABLE = "rows"
@@ -119,7 +115,6 @@ class DataBaseHandler (context: Context) : SQLiteOpenHelper(context ,
         var imgeHref: String
         val db = this.readableDatabase
         val cursor : Cursor = db.rawQuery("SELECT * FROM $ROW_TABLE ", null)
-        Log.d("DATABASE", "DATABASE moveToFirst "+cursor.moveToFirst())
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()){
                 if ( !cursor.isNull( cursor.getColumnIndex(KEY_ROW_TITLE) ) )
